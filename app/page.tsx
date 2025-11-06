@@ -18,7 +18,7 @@ const translations = {
     predictBtn: "Predict",
     cropsAnalyzed: "Crops Analyzed",
     accuracyRate: "Accuracy Rate",
-    // farmersHelped: "Farmers Helped",
+    farmersHelped: "Farmers Helped",
     supportAvailable: "Support Available",
     tryAIDetection: "Try AI Detection",
     liveDemo: "Live Demo",
@@ -44,7 +44,6 @@ const translations = {
     uploadImageToSee: "Upload an image and click Analyze to see results",
     getting: "Getting...",
     copyright: "© 2025 CropCare AI. All rights reserved. Powering sustainable agriculture with AI.",
-    // About Section
     whyChoose: "Why Choose CropCare AI",
     cuttingEdgeTech: "Cutting edge technology meets practical farming solutions",
     lightningFast: "Lightning Fast",
@@ -76,7 +75,6 @@ const translations = {
     testimonial3: "Easy to use, reliable, and the 24/7 support is fantastic. The AI's accuracy is remarkable.",
     testimonial3Author: "Mohammed Ali",
     testimonial3Role: "Rice Farmer, West Bengal",
-    // Contact Section
     contactHeading: "Get In Touch With Us",
     contactDesc: "Have questions? Our team is here to help. Fill out the form below and we'll get back to you soon.",
     name: "Name",
@@ -130,7 +128,6 @@ const translations = {
     uploadImageToSee: "परिणाम देखने के लिए एक छवि अपलोड करें और विश्लेषण करें पर क्लिक करें",
     getting: "प्राप्त हो रहा है...",
     copyright: "© 2025 CropCare AI। सर्वाधिकार सुरक्षित। एआई के साथ टिकाऊ कृषि को शक्तिशाली बनाना।",
-    // About Section
     whyChoose: "CropCare AI को क्यों चुनें",
     cuttingEdgeTech: "अत्याधुनिक तकनीक व्यावहारिक कृषि समाधान से मिलती है",
     lightningFast: "बिजली की गति से तेज",
@@ -160,7 +157,6 @@ const translations = {
     testimonial3: "उपयोग में आसान, विश्वसनीय, और 24/7 समर्थन शानदार है। AI की सटीकता उल्लेखनीय है।",
     testimonial3Author: "मोहम्मद अली",
     testimonial3Role: "धान किसान, पश्चिम बंगाल",
-    // Contact Section
     contactHeading: "हमसे संपर्क करें",
     contactDesc: "प्रश्न हैं? हमारी टीम आपकी मदद के लिए यहां है। नीचे दिया गया फॉर्म भरें और हम जल्द ही आपसे संपर्क करेंगे।",
     name: "नाम",
@@ -178,20 +174,23 @@ const translations = {
 }
 
 export default function Home() {
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [preview, setPreview] = useState(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState(null)
-  const [error, setError] = useState(null)
+  const [result, setResult] = useState<any>(null)
+  const [error, setError] = useState<string | null>(null)
   const [location, setLocation] = useState({ latitude: "", longitude: "", city: "" })
   const [gettingLocation, setGettingLocation] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [language, setLanguage] = useState("en")
-  const fileInputRef = useRef(null)
+  const [language, setLanguage] = useState<"en" | "hi">("en")
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const t = (key:any) => translations[language]?.[key] || key
+  const t = (key: string) => {
+    const translation = translations[language] as any
+    return translation[key] || key
+  }
 
-  const handleFileSelect = (e) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file && file.type.startsWith("image/")) {
       setSelectedFile(file)
@@ -200,7 +199,7 @@ export default function Home() {
 
       const reader = new FileReader()
       reader.onloadend = () => {
-        setPreview(reader.result)
+        setPreview(reader.result as string)
       }
       reader.readAsDataURL(file)
     } else {
@@ -268,7 +267,7 @@ export default function Home() {
 
       const data = await response.json()
       setResult(data)
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || "Failed to connect to the server")
     } finally {
       setLoading(false)
@@ -328,7 +327,7 @@ export default function Home() {
               </button>
               <select
                 value={language}
-                onChange={(e) => setLanguage(e.target.value)}
+                onChange={(e) => setLanguage(e.target.value as "en" | "hi")}
                 className="bg-slate-800 text-white px-3 py-1 rounded-lg text-sm hover:bg-slate-700 transition"
               >
                 <option value="en">EN</option>
@@ -362,7 +361,7 @@ export default function Home() {
                 <label className="text-xs text-gray-400 block mb-2">Language</label>
                 <select
                   value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
+                  onChange={(e) => setLanguage(e.target.value as "en" | "hi")}
                   className="w-full bg-slate-800 text-white px-3 py-2 rounded-lg text-sm hover:bg-slate-700 transition"
                 >
                   <option value="en">English</option>
