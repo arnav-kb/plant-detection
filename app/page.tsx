@@ -189,7 +189,7 @@ export default function Home() {
   const [language, setLanguage] = useState("en")
   const fileInputRef = useRef(null)
 
-  const t = (key) => translations[language]?.[key] || key
+  const t = (key:any) => translations[language]?.[key] || key
 
   const handleFileSelect = (e) => {
     const file = e.target.files?.[0]
